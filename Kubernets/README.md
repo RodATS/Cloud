@@ -85,3 +85,11 @@ Para mostrar la escalibilidad que nos ofrece kubernets uno le puede indicar que 
 kubectl scale deployment frontend --replicas=6
 kubectl get deployments
 ```
+
+## Tolerancia a fallas
+Se realizará una simulación en la que todos los servicios del frontend se caerán y se visualizará como se crean unos nuevos.
+```bash
+kubectl delete pods -l app=frontend
+kubectl get pods
+kubectl get deployments
+```
