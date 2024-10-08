@@ -17,3 +17,24 @@ sudo apt install -y docker.io
 sudo systemctl start docker
 sudo systemctl enable docker
 sudo usermod -aG docker $USER
+```
+
+##Instalacioón de Minikube
+```bash
+curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube /usr/local/bin/
+```
+
+##Crear Cluster con 3 nodos
+```bash
+minikube start --nodes=3 --driver=docker
+```
+Instalación de los paquetes faltantes
+```bash
+sudo snap install kubectl --classic
+minikube addons enable registry
+kubectl create namespace registry
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/minikube/master/deploy/addons/registry/registry-deployment.yaml
+kubectl get svc -n registry
+
+```
