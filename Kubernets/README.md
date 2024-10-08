@@ -29,12 +29,23 @@ sudo install minikube /usr/local/bin/
 ```bash
 minikube start --nodes=3 --driver=docker
 ```
-Instalación de los paquetes faltantes
+Instalación de los paquetes faltantes y habilitar que minikube pueda acceder a las imágenes de los dockerfile
 ```bash
 sudo snap install kubectl --classic
 minikube addons enable registry
 kubectl create namespace registry
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/minikube/master/deploy/addons/registry/registry-deployment.yaml
 kubectl get svc -n registry
-
+```
+##Creamos Carpetas
+```bash
+mkdir proyectoKubernets
+cd proyectoKubernets
+mkdir backend frontend k8s
+cd backend
+```
+##Creación de archivos para el backend
+```bash
+nano app.py
+nano Dockerfile
 ```
