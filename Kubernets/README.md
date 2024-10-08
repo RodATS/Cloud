@@ -13,31 +13,28 @@ Sigue estos pasos para instalar Docker:
 
 ```bash
 sudo apt update
-sudo apt install -y docker.io
-sudo systemctl start docker
-sudo systemctl enable docker
+sudo apt install apt-transport-https ca-certificates curl software-properties-common 
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg 
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null 
+sudo apt update 
+sudo apt install docker-ce 
+sudo systemctl start docker          # Inicia el servicio de Docker
+sudo systemctl enable docker         # Habilita Docker para que inicie en el arranque
 sudo usermod -aG docker $USER
+sudo systemctl status Docker
+
 ```
 
-##Instalacioón de Minikube
+## Instalacioón de Minikube
 ```bash
-curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 sudo install minikube /usr/local/bin/
+sudo snap install kubectl --classic
+
 ```
 
-##Crear Cluster con 3 nodos
-```bash
-minikube start --nodes=3 --driver=docker
-```
-Instalación de los paquetes faltantes y habilitar que minikube pueda acceder a las imágenes de los dockerfile
-```bash
-sudo snap install kubectl --classic
-minikube addons enable registry
-kubectl create namespace registry
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/minikube/master/deploy/addons/registry/registry-deployment.yaml
-kubectl get svc -n registry
-```
-##Creamos Carpetas
+## Creamos Carpetas
+Agregar en cada carpeta los archivos correspondientes. Revisar la carpeta 
 ```bash
 mkdir proyectoKubernets
 cd proyectoKubernets
