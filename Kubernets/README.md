@@ -38,7 +38,7 @@ Agregar en cada carpeta los archivos correspondientes. Revisar la carpeta "proye
 ```bash
 mkdir proyectoKubernets
 cd proyectoKubernets
-mkdir backend frontend k8s
+mkdir backend frontend
 cd backend
 ```
 ## Creación de kubernets con 3 nodos
