@@ -34,15 +34,54 @@ sudo snap install kubectl --classic
 ```
 
 ## Creamos Carpetas
-Agregar en cada carpeta los archivos correspondientes. Revisar la carpeta 
+Agregar en cada carpeta los archivos correspondientes. Revisar la carpeta "proyectoKubernets". (puedes descargar el git o crear los archivos manualmente con (`nano`).
 ```bash
 mkdir proyectoKubernets
 cd proyectoKubernets
 mkdir backend frontend k8s
 cd backend
 ```
-##Creación de archivos para el backend
+## Creación de kubernets con 3 nodos
 ```bash
-nano app.py
-nano Dockerfile
+sudo systemctl start docker
+sudo systemctl enable docker
+minikube start --nodes=3 --driver=Docker
+minikube addons enable registry
+minikube addons list | grep registry
+kubectl get svc --namespace kube-system
+docker run --rm -it --network=host alpine ash -c "apk add socat && socat TCP-LISTEN:5000,reuseaddr,fork TCP:$(minikube ip):5000"
+```
+
+## Construcción de Dockerfile y Upload de las imágenes
+En una terminal nueva:
+```bash
+cd /mi-proyecto
+cd backend
+docker build -t backend/backend-image .
+docker tag backend/backend-image localhost:5000/backend-image
+docker push localhost:5000/ backend/backend-image
+```
+En otra terminal:
+```bash
+cd /mi-proyecto
+cd frontend
+docker build -t frontend-image .
+docker tag frontend/frontend-image localhost:5000/frontend-image
+docker push localhost:5000/frontend-image
+```
+
+## Carga de imágenes a los contenendores y creación de servicios
+El último comando imprimirá la dirección de la página creada, copiar y pegar en el navegador.
+```bash
+cd /mi-proyecto
+kubectl apply -f k8s-deployment.yaml
+kubectl get pods
+minikube service frontend –url
+```
+
+## Escalabilidad
+Para mostrar la escalibilidad que nos ofrece kubernets uno le puede indicar que servicio se le hará el cambio en este caso "frontend" y se le indica la cantidad a escalar.
+```bash
+kubectl scale deployment frontend --replicas=6
+kubectl get deployments
 ```
