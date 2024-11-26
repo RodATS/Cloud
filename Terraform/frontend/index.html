@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frontend</title>
+</head>
+<body>
+  <h1>Frontend App</h1>
+  <p id="backend-response"></p>
+  <script>
+    // fetch('/api')
+    //   .then(response => response.text())
+    //   .then(data => {
+    //     document.getElementById('backend-response').innerText = data;
+    //   });
+    fetch('/api', { redirect: 'manual' })
+
+  </script>
+</body>
+</html>
