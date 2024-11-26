@@ -33,28 +33,36 @@ sudo snap install kubectl --classic
 
 ```
 
-## Construir las imágenes Docker:
+## Ejecución del proyecto:
+
 ```bash
-cd Docker/backend
-docker build -t backend:1.0 .
-cd ../frontend
-docker build -t frontend:1.0 .
+minikube start --nodes 3
+minikube addons enable registry
+minikube addons enable metrics-server
+kubectl get apiservice v1beta1.metrics.k8s.io -o jsonpath='{.status.conditions[0].status}'
+
+docker run --rm -it --network=host alpine ash -c "apk add socat && socat TCP-LISTEN:5000,reuseaddr,fork TCP:$(minikube ip):5000"
+
+docker build -t backend:1.0 ./backend
+docker tag backend:1.0 localhost:5000/backend:1.0
+docker push localhost:5000/backend:1.0
+
+docker build -t frontend:1.0 ./frontend
+docker tag frontend:1.0 localhost:5000/frontend:1.0
+docker push localhost:5000/frontend:1.0
 ```
 
-## Iniciar Minikube:
-```bash
-minikube start --nodes=3
-```
-
-## Cargar imágenes a Minikube:
-```bash
-minikube image load backend:1.0
-minikube image load frontend:1.0
-```
 
 ## Inicializar Terraform:
 ```bash
 terraform init
 terraform apply
 kubectl get all -n app
+```
+
+## Revisar el estado de los servicios y obtener la url:
+```bash
+kubectl get pods
+kubectl get services
+minikube service frontend-service --url
 ```
