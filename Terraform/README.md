@@ -5,7 +5,7 @@
 <li> Paolo Delgado </li>
 <li> Rodrigo Torres</li>
 
-
+## Descripción del proyecto
 Este repositorio incluye los pasos para instalar Docker y Minikube en un entorno Linux. Y seguidamente la configuración para poder ejecutar servicios dentro de Terraform y visualizarlo a través de una interfaz gráfica para el servicio.
 
 ## Requisitos previos
