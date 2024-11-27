@@ -32,13 +32,21 @@ sudo systemctl status Docker
 
 ```
 
-## Instalacioón de Minikube
+## Instalación de Minikube
 ```bash
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 sudo install minikube /usr/local/bin/
 sudo snap install kubectl --classic
 
 ```
+## Instalación de Terraform
+Entrar a la página oficial de terraform https://developer.hashicorp.com/terraform/install Buscar la versión reciente de Terraform para Linux AMD64 y copiar el enlace de la descarga. Descomprimir el archivo y mover la carpeta a la carpeta bin.
+```bash
+sudo wget LINK-DE-DESCARGA
+sudo unzip ARCHIVO-TERRAFORM.zip
+sudo mv terraform /usr/home/bin
+```
+
 
 ## Ejecución del proyecto:
 
