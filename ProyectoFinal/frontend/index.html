@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subir y Ver Imagen</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      color: #ffffff;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      margin-top: 20px;
+      font-size: 2.5rem;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    form {
+      margin: 20px auto;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    input[type="file"] {
+      margin: 10px 0;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #ffffff;
+      color: #333;
+      cursor: pointer;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: #ff7f50;
+      color: #ffffff;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #ff6347;
+    }
+
+    img {
+      margin-top: 20px;
+      max-width: 90%;
+      height: auto;
+      border: 2px solid #ffffff;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .image-list {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      justify-items: center;
+    }
+
+    .image-list img {
+      max-width: 100%;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <h1>Subir Imagen</h1>
+  <form id="uploadForm">
+    <input type="file" id="imageInput" accept="image/*" required />
+    <button type="submit">Subir Imagen</button>
+  </form>
+  <h2>Imágenes Subidas:</h2>
+  <div id="imageList" class="image-list"></div>
+
+  <script>
+    const form = document.getElementById('uploadForm');
+    const imageList = document.getElementById('imageList');
+
+    // Función para cargar las imágenes guardadas
+    async function loadImages() {
+      try {
+        const response = await fetch('http://192.168.49.2:30080/images'); // Cambia la URL si es necesario
+        if (!response.ok) {
+          throw new Error('Error al cargar las imágenes');
+        }
+
+        const images = await response.json();
+
+        // Limpiar la lista de imágenes
+        imageList.innerHTML = '';
+
+        // Mostrar todas las imágenes
+        images.forEach(imagePath => {
+          const img = document.createElement('img');
+          img.src = imagePath;  // La ruta de la imagen es la que se obtiene del backend
+          img.alt = 'Imagen subida';
+          imageList.appendChild(img);
+        });
+      } catch (error) {
+        console.error(error);
+        alert('Ocurrió un error al cargar las imágenes');
+      }
+    }
+
+    // Cargar imágenes al inicio
+    loadImages();
+
+    // Manejar la subida de una nueva imagen
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const imageInput = document.getElementById('imageInput').files[0];
+
+      if (!imageInput) {
+        alert('Por favor, selecciona una imagen');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('image', imageInput);
+
+      try {
+        const response = await fetch('http://192.168.49.2:30080/upload', { // Cambia la URL según el servidor
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error('Error al subir la imagen');
+        }
+
+        const message = await response.text(); // Obtener el mensaje de respuesta del backend
+        alert(message); // Mostrar mensaje de éxito
+
+        // Recargar las imágenes después de subir una nueva
+        loadImages();
+      } catch (error) {
+        console.error(error);
+        alert('Ocurrió un error');
+      }
+    });
+  </script>
+</body>
+</html>
+
